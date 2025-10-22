@@ -21,6 +21,7 @@ import { WarehousesModule } from './modules/warehouses/warehouses.module';
 import { SuppliersModule } from './modules/suppliers/suppliers.module';
 import { PurchaseOrdersModule } from './modules/purchase-orders/purchase-orders.module';
 import { StockMovementsModule } from './modules/stock-movements/stock-movements.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 // Shared modules
 import { PrismaModule } from './shared/prisma/prisma.module';
@@ -61,6 +62,7 @@ import { PrismaModule } from './shared/prisma/prisma.module';
     SuppliersModule,
     PurchaseOrdersModule,
     StockMovementsModule,
+    DashboardModule,
   ],
 })
 export class AppModule {}

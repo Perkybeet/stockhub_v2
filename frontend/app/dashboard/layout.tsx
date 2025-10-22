@@ -35,7 +35,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { Separator } from "@/components/ui/separator";
 import { VisuallyHidden } from "@/components/ui/visually-hidden";
 
@@ -78,31 +78,23 @@ function SidebarContent({ pathname, company }: SidebarProps) {
           {navigation.map((item) => {
             const isActive = pathname === item.href;
             return (
-              <TooltipProvider key={item.name} delayDuration={0}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link
-                      href={item.href}
-                      className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer ${
-                        isActive
-                          ? "bg-yellow-600 text-white shadow-lg shadow-yellow-500/50"
-                          : "text-slate-300 hover:bg-slate-700/50 hover:text-white"
-                      }`}
-                    >
-                      <item.icon className={`h-5 w-5 transition-transform group-hover:scale-110 ${
-                        isActive ? "text-white" : "text-slate-400"
-                      }`} />
-                      <span>{item.name}</span>
-                      {isActive && (
-                        <div className="ml-auto h-2 w-2 rounded-full bg-white animate-pulse" />
-                      )}
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent side="right">
-                    <p>{item.name}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer ${
+                  isActive
+                    ? "bg-yellow-600 text-white shadow-lg shadow-yellow-500/50"
+                    : "text-slate-300 hover:bg-slate-700/50 hover:text-white"
+                }`}
+              >
+                <item.icon className={`h-5 w-5 transition-transform group-hover:scale-110 ${
+                  isActive ? "text-white" : "text-slate-400"
+                }`} />
+                <span>{item.name}</span>
+                {isActive && (
+                  <div className="ml-auto h-2 w-2 rounded-full bg-white animate-pulse" />
+                )}
+              </Link>
             );
           })}
         </nav>
@@ -146,9 +138,18 @@ export default function DashboardLayout({
 
   const handleLogout = async () => {
     try {
+      console.log('🚪 Iniciando cierre de sesión...');
       await logout();
+      console.log('✅ Sesión cerrada exitosamente');
+      
+      // Force a hard reload to clear all state and redirect to login
+      // Using window.location.href ensures all cookies and state are cleared
+      window.location.href = '/auth/login';
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error("❌ Error al cerrar sesión:", error);
+      // Even if logout fails on server, redirect to login
+      // The clearAuth() in logout() will have already cleared local state
+      window.location.href = '/auth/login';
     }
   };
 

@@ -86,7 +86,9 @@ export const authApi = {
   },
 
   logout: async () => {
-    const response = await api.post('/auth/logout');
+    // Send refreshToken in the body so backend can invalidate the session
+    const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : null;
+    const response = await api.post('/auth/logout', { refreshToken });
     return response.data;
   },
 
@@ -97,7 +99,7 @@ export const authApi = {
   },
 
   getProfile: async () => {
-    const response = await api.get('/auth/profile');
+    const response = await api.get('/auth/me');
     return response.data;
   },
 
@@ -135,7 +137,7 @@ export const authApi = {
   },
 
   updateProfile: async (data: Partial<{ firstName: string; lastName: string; phone: string }>) => {
-    const response = await api.patch('/auth/profile', data);
+    const response = await api.patch('/auth/me', data);
     return response.data;
   },
 

@@ -8,7 +8,7 @@ Sistema integral de gestión de inventario para cadenas de restaurantes, empresa
 ### Backend
 - **Framework**: NestJS 11+ con TypeScript
 - **Base de Datos**: PostgreSQL 18 (puerto 5433)
-- **ORM**: Prisma 6
+- **ORM**: Prisma 6 (nunca usar raw SQL a menos que sea necesario)
 - **Caché**: Redis (sesiones y performance)
 - **Autenticación**: JWT + Refresh Tokens
 - **Validación**: Class-validator y DTO patterns

@@ -1,8 +1,10 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { User, Company, UserSession } from "@/types";
 import { authApi } from "@/lib/api";
+import { RotateSpinner } from "@/components/ui/loading";
 
 interface AuthState {
   user: User | null;
@@ -43,47 +45,54 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Initialize authentication state
-  const initializeAuth = useCallback(async () => {
-    try {
-      const accessToken = localStorage.getItem("accessToken");
-      const refreshTokenStored = localStorage.getItem("refreshToken");
-      
-      if (accessToken && refreshTokenStored) {
-        // Try to get user profile with current token
-        try {
-          const profile = await authApi.getProfile();
-          
-          setState({
-            user: profile.user || profile,
-            company: null,
-            session: null,
+  useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        const accessToken = localStorage.getItem("accessToken");
+        const refreshTokenStored = localStorage.getItem("refreshToken");
+        
+        console.log('🔄 Initializing auth state...', { hasAccessToken: !!accessToken, hasRefreshToken: !!refreshTokenStored });
+        
+        if (accessToken && refreshTokenStored) {
+          // Try to get user profile with current token
+          try {
+            console.log('📡 Fetching user profile...');
+            const profile = await authApi.getProfile();
+            
+            console.log('✅ Profile loaded successfully:', profile);
+            
+            setState({
+              user: profile.user || profile,
+              company: null,
+              session: null,
+              isLoading: false,
+              isAuthenticated: true,
+            });
+          } catch (error) {
+            // Token might be expired, clear auth
+            console.error('❌ Failed to load profile:', error);
+            clearAuth();
+          }
+        } else {
+          console.log('ℹ️ No tokens found, user not authenticated');
+          setState(prev => ({
+            ...prev,
             isLoading: false,
-            isAuthenticated: true,
-          });
-        } catch {
-          // Token might be expired, clear auth
-          clearAuth();
+            isAuthenticated: false,
+          }));
         }
-      } else {
+      } catch (error) {
+        console.error("❌ Auth initialization error:", error);
         setState(prev => ({
           ...prev,
           isLoading: false,
           isAuthenticated: false,
         }));
       }
-    } catch (error) {
-      console.error("Auth initialization error:", error);
-      setState(prev => ({
-        ...prev,
-        isLoading: false,
-        isAuthenticated: false,
-      }));
-    }
-  }, [clearAuth]);
+    };
 
-  useEffect(() => {
     initializeAuth();
-  }, [initializeAuth]);
+  }, [clearAuth]);
 
   const login = async (email: string, password: string) => {
     try {
@@ -125,12 +134,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
+      // Send logout request to invalidate session on server
+      // Backend will clear HTTP-only cookies and invalidate session
       await authApi.logout();
+      
       console.log('🍪 Cookies cleared by server');
+      console.log('🗑️ Session invalidated on server');
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error("❌ Logout error:", error);
+      // Continue with logout even if server request fails
     } finally {
+      // Always clear local storage and state, even if server request fails
       clearAuth();
+      console.log('✅ Local auth state cleared');
     }
   };
 
@@ -194,17 +210,28 @@ export function useAuth() {
 export function withAuth<P extends object>(Component: React.ComponentType<P>) {
   return function AuthenticatedComponent(props: P) {
     const { isAuthenticated, isLoading } = useAuth();
+    const router = useRouter();
+    
+    React.useEffect(() => {
+      if (!isLoading && !isAuthenticated) {
+        console.log('🔒 Not authenticated, redirecting to login...');
+        router.push('/auth/login');
+      }
+    }, [isLoading, isAuthenticated, router]);
     
     if (isLoading) {
       return (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+        <div className="min-h-screen flex items-center justify-center bg-slate-50">
+          <div className="text-center">
+            <RotateSpinner size={60} color="#eab308" className="mx-auto mb-4" />
+            <p className="text-slate-600 text-sm font-medium">Cargando...</p>
+          </div>
         </div>
       );
     }
     
     if (!isAuthenticated) {
-      // Redirect to login will be handled by middleware
+      // Show nothing while redirecting
       return null;
     }
     
