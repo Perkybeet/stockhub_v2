@@ -8,10 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { authApi } from "@/lib/api";
+import { useAuth } from "@/lib/contexts/AuthContext";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -60,28 +61,15 @@ export default function LoginPage() {
     setErrors(prev => ({ ...prev, general: "" }));
 
     try {
-      const response = await authApi.login({
-        email: formData.email,
-        password: formData.password,
-      });
+      // Use the login method from AuthContext
+      await login(formData.email, formData.password);
 
-      // Type assertion since we know the structure
-      const loginData = response.data as {
-        accessToken: string;
-        refreshToken: string;
-        user: any;
-        company: any;
-        session: any;
-      };
-
-      // Store tokens in localStorage (you might want to use secure storage)
-      localStorage.setItem("accessToken", loginData.accessToken);
-      localStorage.setItem("refreshToken", loginData.refreshToken);
-      localStorage.setItem("user", JSON.stringify(loginData.user));
+      console.log('✅ Login successful, redirecting to dashboard...');
 
       // Redirect to dashboard
       router.push("/dashboard");
     } catch (error: unknown) {
+      console.error('❌ Login error:', error);
       const errorMessage = error instanceof Error ? error.message : "Error al iniciar sesión. Verifique sus credenciales.";
       setErrors(prev => ({
         ...prev,

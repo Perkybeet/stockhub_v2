@@ -10,6 +10,7 @@ export const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // Enable sending cookies
 });
 
 // Request interceptor to add auth token
@@ -79,18 +80,28 @@ export const apiRequest = {
 
 // Auth API functions
 export const authApi = {
-  login: (credentials: { email: string; password: string }) =>
-    apiRequest.post<any>('/auth/login', credentials),
+  login: async (credentials: { email: string; password: string }) => {
+    const response = await api.post('/auth/login', credentials);
+    return response.data; // Backend returns data directly
+  },
 
-  logout: () => apiRequest.post<{ message: string }>('/auth/logout'),
+  logout: async () => {
+    const response = await api.post('/auth/logout');
+    return response.data;
+  },
 
-  refreshToken: () =>
-    apiRequest.post<any>('/auth/refresh'),
+  refreshToken: async () => {
+    const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : null;
+    const response = await api.post('/auth/refresh', { refreshToken });
+    return response.data;
+  },
 
-  getProfile: () =>
-    apiRequest.get<any>('/auth/profile'),
+  getProfile: async () => {
+    const response = await api.get('/auth/profile');
+    return response.data;
+  },
 
-  register: (data: {
+  register: async (data: {
     company: {
       name: string;
       email: string;
@@ -103,31 +114,50 @@ export const authApi = {
       email: string;
       password: string;
     };
-  }) => apiRequest.post<{ message: string }>('/auth/register', data),
+  }) => {
+    const response = await api.post('/auth/register', data);
+    return response.data;
+  },
 
-  forgotPassword: (email: string) =>
-    apiRequest.post<{ message: string }>('/auth/forgot-password', { email }),
+  forgotPassword: async (email: string) => {
+    const response = await api.post('/auth/forgot-password', { email });
+    return response.data;
+  },
 
-  resetPassword: (token: string, password: string) =>
-    apiRequest.post('/auth/reset-password', { token, password }),
+  resetPassword: async (token: string, password: string) => {
+    const response = await api.post('/auth/reset-password', { token, password });
+    return response.data;
+  },
 
-  verifyEmail: (token: string) =>
-    apiRequest.post('/auth/verify-email', { token }),
+  verifyEmail: async (token: string) => {
+    const response = await api.post('/auth/verify-email', { token });
+    return response.data;
+  },
 
-  getProfile: () => apiRequest.get('/auth/profile'),
+  updateProfile: async (data: Partial<{ firstName: string; lastName: string; phone: string }>) => {
+    const response = await api.patch('/auth/profile', data);
+    return response.data;
+  },
 
-  updateProfile: (data: Partial<{ firstName: string; lastName: string; phone: string }>) =>
-    apiRequest.patch('/auth/profile', data),
+  changePassword: async (data: { currentPassword: string; newPassword: string }) => {
+    const response = await api.patch('/auth/change-password', data);
+    return response.data;
+  },
 
-  changePassword: (data: { currentPassword: string; newPassword: string }) =>
-    apiRequest.patch('/auth/change-password', data),
+  getSessions: async () => {
+    const response = await api.get('/auth/sessions');
+    return response.data;
+  },
 
-  getSessions: () => apiRequest.get('/auth/sessions'),
+  revokeSession: async (sessionId: string) => {
+    const response = await api.delete(`/auth/sessions/${sessionId}`);
+    return response.data;
+  },
 
-  revokeSession: (sessionId: string) =>
-    apiRequest.delete(`/auth/sessions/${sessionId}`),
-
-  revokeAllSessions: () => apiRequest.delete('/auth/sessions'),
+  revokeAllSessions: async () => {
+    const response = await api.delete('/auth/sessions');
+    return response.data;
+  },
 };
 
 // Companies API
