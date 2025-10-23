@@ -102,6 +102,7 @@ export function WarehouseStockChart() {
         }
       },
       x: {
+        display: false, // Ocultar el eje X completamente
         ticks: {
           color: '#94a3b8'
         },

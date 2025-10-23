@@ -190,6 +190,81 @@ export interface Product {
   updatedAt: string;
   category?: Category;
   unit: Unit;
+  suppliers?: ProductSupplier[];
+  inventory?: Inventory[];
+}
+
+export interface ProductSupplier {
+  id: string;
+  productId: string;
+  supplierId: string;
+  supplierSku?: string;
+  supplierPrice?: number;
+  minimumOrderQuantity?: number;
+  leadTimeDays?: number;
+  isPreferred: boolean;
+  lastPurchaseDate?: string;
+  createdAt: string;
+  updatedAt: string;
+  supplier: Supplier;
+}
+
+export interface Supplier {
+  id: string;
+  companyId: string;
+  name: string;
+  legalName?: string;
+  taxId?: string;
+  email?: string;
+  phone?: string;
+  website?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  postalCode?: string;
+  contactPerson?: string;
+  contactPhone?: string;
+  contactEmail?: string;
+  paymentTerms?: string;
+  creditLimit?: number;
+  rating?: number;
+  notes?: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateProductDto {
+  categoryId?: string;
+  sku: string;
+  barcode?: string;
+  name: string;
+  description?: string;
+  imageUrl?: string;
+  unitId: string;
+  unitPrice?: number;
+  costPrice?: number;
+  taxRate?: number;
+  minStockLevel?: number;
+  maxStockLevel?: number;
+  reorderPoint?: number;
+  reorderQuantity?: number;
+  productType?: 'simple' | 'composite' | 'service';
+  isPerishable?: boolean;
+  shelfLifeDays?: number;
+  storageConditions?: string;
+  isActive?: boolean;
+  metadata?: Record<string, any>;
+}
+
+export interface UpdateProductDto extends Partial<CreateProductDto> {}
+
+export interface ProductQueryParams extends PaginationParams {
+  categoryId?: string;
+  productType?: 'simple' | 'composite' | 'service';
+  isActive?: boolean;
+  isPerishable?: boolean;
 }
 
 // Category types

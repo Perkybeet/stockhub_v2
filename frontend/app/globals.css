@@ -67,6 +67,20 @@
     color: var(--color-foreground);
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+
+  /* Cursor de texto visible en todos los inputs y textareas */
+  input,
+  textarea,
+  [contenteditable="true"] {
+    caret-color: var(--color-primary);
+  }
+
+  /* Alternativa: usar el color del texto para el cursor */
+  input:focus,
+  textarea:focus,
+  [contenteditable="true"]:focus {
+    caret-color: var(--color-foreground);
+  }
 }
 
 @layer utilities {
@@ -207,6 +221,26 @@
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: rgb(148 163 184);
+  }
+
+  /* Scrollbar thin utilities */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thumb-slate-300::-webkit-scrollbar-thumb {
+    background-color: rgb(203 213 225);
+    border-radius: 3px;
+  }
+
+  .scrollbar-thumb-slate-300::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(148 163 184);
+  }
+
+  .scrollbar-track-slate-100::-webkit-scrollbar-track {
+    background-color: rgb(241 245 249);
+    border-radius: 3px;
   }
 
   /* Glass morphism effect */

@@ -12,12 +12,6 @@ import { StockAlerts } from "@/components/dashboard/StockAlerts";
 function Dashboard() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
-          <p className="text-slate-600 mt-1">Resumen general de tu inventario</p>
-        </div>
-      </div>
       <DashboardStats />
       <div className="grid gap-6 lg:grid-cols-2">
         <MonthlyMovementsChart />

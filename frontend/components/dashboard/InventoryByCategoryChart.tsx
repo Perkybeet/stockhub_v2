@@ -77,15 +77,26 @@ export function InventoryByCategoryChart() {
   const options: ChartOptions<'pie'> = {
     responsive: true,
     maintainAspectRatio: false,
+    layout: {
+      padding: {
+        top: 10,
+        bottom: 10,
+        left: 10,
+        right: 10
+      }
+    },
     plugins: {
       legend: {
         position: 'right',
         labels: {
-          color: '#e2e8f0',
+          color: '#334155',
           padding: 10,
           font: {
             size: 11
-          }
+          },
+          boxWidth: 12,
+          boxHeight: 12,
+          usePointStyle: true
         }
       },
       tooltip: {

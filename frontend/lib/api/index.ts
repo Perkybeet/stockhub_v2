@@ -186,11 +186,33 @@ export const usersApi = {
 
 // Products API
 export const productsApi = {
-  getAll: (params?: Record<string, unknown>) => apiRequest.get('/products', params),
-  getById: (id: string) => apiRequest.get(`/products/${id}`),
-  create: (data: unknown) => apiRequest.post('/products', data),
-  update: (id: string, data: unknown) => apiRequest.put(`/products/${id}`, data),
-  delete: (id: string) => apiRequest.delete(`/products/${id}`),
+  getAll: async (params?: Record<string, unknown>): Promise<ApiResponse> => {
+    const response = await api.get('/products', { params });
+    return response.data;
+  },
+  getById: async (id: string) => {
+    const response = await api.get(`/products/${id}`);
+    return response.data;
+  },
+  create: async (data: unknown) => {
+    const response = await api.post('/products', data);
+    return response.data;
+  },
+  update: async (id: string, data: unknown) => {
+    const response = await api.patch(`/products/${id}`, data);
+    return response.data;
+  },
+  delete: async (id: string) => {
+    await api.delete(`/products/${id}`);
+  },
+  deactivate: async (id: string) => {
+    const response = await api.patch(`/products/${id}/deactivate`);
+    return response.data;
+  },
+  activate: async (id: string) => {
+    const response = await api.patch(`/products/${id}/activate`);
+    return response.data;
+  },
   getInventory: (id: string) => apiRequest.get(`/products/${id}/inventory`),
 };
 

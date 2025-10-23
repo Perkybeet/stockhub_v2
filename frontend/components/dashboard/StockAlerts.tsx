@@ -115,8 +115,8 @@ export function StockAlerts() {
   }
 
   return (
-    <Card className="bg-slate-50 border-slate-200">
-      <CardHeader>
+    <Card className="bg-slate-50 border-slate-200 flex flex-col">
+      <CardHeader className="shrink-0">
         <div className="flex items-center justify-between">
           <div>
             <CardTitle className="text-slate-900">Alertas de Stock</CardTitle>
@@ -129,8 +129,8 @@ export function StockAlerts() {
           </Badge>
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-3">
+      <CardContent className="flex-1 overflow-hidden flex flex-col">
+        <div className="space-y-3 overflow-y-auto max-h-[400px] pr-2 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-100 flex-1">
           {alerts.map((alert) => {
             const config = severityConfig[alert.severity];
             const Icon = config.icon;
@@ -164,7 +164,7 @@ export function StockAlerts() {
         {alerts.length > 0 && (
           <Button 
             variant="outline" 
-            className="w-full mt-4 border-slate-600 text-slate-300 hover:bg-slate-700"
+            className="w-full mt-4 border-slate-300 text-slate-700 hover:bg-slate-200 shrink-0"
           >
             Ver Todas las Alertas
           </Button>

@@ -103,13 +103,13 @@ export function RecentActivity() {
   }
 
   return (
-    <Card className="bg-slate-50 border-slate-200">
-      <CardHeader>
+    <Card className="bg-slate-50 border-slate-200 flex flex-col">
+      <CardHeader className="shrink-0">
         <CardTitle className="text-slate-900">Actividad Reciente</CardTitle>
         <CardDescription className="text-slate-600">Últimos movimientos de inventario</CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-3">
+      <CardContent className="flex-1 overflow-hidden">
+        <div className="space-y-3 overflow-y-auto max-h-[400px] pr-2 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-100">
           {activities.map((activity) => {
             const config = typeConfig[activity.type];
             const Icon = config.icon;
