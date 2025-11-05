@@ -187,4 +187,4 @@ lib/
 
 ### Comandos de usuario (prefix: ?)
 ?commit: Generate a concise and descriptive git commit message based on the changes made in the recent edits.
-?commitpush: Create a git commit with the generated message and push the changes to the remote repository.
+?commitpush: Create a concise and descriptive git commit and push the changes to the remote repository.
