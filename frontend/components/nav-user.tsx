@@ -62,7 +62,7 @@ export function NavUser({
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg bg-gradient-to-br from-yellow-600 to-yellow-700 text-white">
+                <AvatarFallback className="rounded-lg bg-linear-to-br from-yellow-600 to-yellow-700 text-white">
                   {getUserInitials()}
                 </AvatarFallback>
               </Avatar>

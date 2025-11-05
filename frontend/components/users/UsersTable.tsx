@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -55,37 +54,8 @@ export function UsersTable({
   onRoleChange,
   isLoading 
 }: UsersTableProps) {
-  const [editingCell, setEditingCell] = useState<{ userId: string; field: string } | null>(null);
-  const [editValue, setEditValue] = useState<string>('');
-  const [savingCell, setSavingCell] = useState<string | null>(null);
-
-  const handleStartEdit = (userId: string, field: string, currentValue: string) => {
-    setEditingCell({ userId, field });
-    setEditValue(currentValue);
-  };
-
-  const handleSaveEdit = async (userId: string, field: string) => {
-    setSavingCell(`${userId}-${field}`);
-    try {
-      await onQuickUpdate(userId, field, editValue);
-      setEditingCell(null);
-    } finally {
-      setSavingCell(null);
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setEditingCell(null);
-    setEditValue('');
-  };
-
   const handleToggleActive = async (userId: string, currentValue: boolean) => {
-    setSavingCell(`${userId}-isActive`);
-    try {
-      await onQuickUpdate(userId, 'isActive', !currentValue);
-    } finally {
-      setSavingCell(null);
-    }
+    await onQuickUpdate(userId, 'isActive', !currentValue);
   };
 
   const getInitials = (firstName: string, lastName: string) => {
@@ -127,74 +97,25 @@ export function UsersTable({
             <TableHead className="w-[150px]">Teléfono</TableHead>
             <TableHead className="w-[200px]">Roles</TableHead>
             <TableHead className="w-[100px]">Estado</TableHead>
-            <TableHead className="w-[80px] text-right">Acciones</TableHead>
+            <TableHead className="w-20 text-right">Acciones</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {users.map((user) => {
-            const isEditingFirstName = editingCell?.userId === user.id && editingCell?.field === 'firstName';
-            const isEditingLastName = editingCell?.userId === user.id && editingCell?.field === 'lastName';
-            const isEditingEmail = editingCell?.userId === user.id && editingCell?.field === 'email';
-            const isEditingPhone = editingCell?.userId === user.id && editingCell?.field === 'phone';
-            const isSaving = savingCell?.startsWith(user.id);
-
             return (
               <TableRow key={user.id} className="group hover:bg-muted/30 transition-colors">
                 {/* User Info */}
                 <TableCell>
                   <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10 border-2 border-primary/10">
-                      <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/5 text-primary font-semibold">
+                      <AvatarFallback className="bg-linear-to-br from-primary/20 to-primary/5 text-primary font-semibold">
                         {getInitials(user.firstName, user.lastName)}
                       </AvatarFallback>
                     </Avatar>
                     <div className="space-y-1">
-                      {isEditingFirstName || isEditingLastName ? (
-                        <div className="flex items-center gap-1">
-                          <Input
-                            value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
-                            className="h-7 w-32 text-sm"
-                            autoFocus
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
-                                handleSaveEdit(user.id, editingCell!.field);
-                              } else if (e.key === 'Escape') {
-                                handleCancelEdit();
-                              }
-                            }}
-                          />
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="h-7 w-7 p-0"
-                            onClick={() => handleSaveEdit(user.id, editingCell!.field)}
-                            disabled={isSaving}
-                          >
-                            {isSaving ? (
-                              <div className="h-3 w-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                            ) : (
-                              <Check className="h-3 w-3 text-green-600" />
-                            )}
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="h-7 w-7 p-0"
-                            onClick={handleCancelEdit}
-                          >
-                            <X className="h-3 w-3 text-red-600" />
-                          </Button>
-                        </div>
-                      ) : (
-                        <div
-                          className="font-medium cursor-pointer hover:text-primary transition-colors flex items-center gap-2"
-                          onClick={() => handleStartEdit(user.id, 'firstName', user.firstName)}
-                        >
-                          {user.firstName} {user.lastName}
-                          <Edit2 className="h-3 w-3 opacity-0 group-hover:opacity-50 transition-opacity" />
-                        </div>
-                      )}
+                      <div className="font-medium">
+                        {user.firstName} {user.lastName}
+                      </div>
                       <div className="text-xs text-muted-foreground flex items-center gap-1">
                         <Clock className="h-3 w-3" />
                         Último acceso: {user.lastLoginAt ? new Date(user.lastLoginAt).toLocaleDateString() : 'Nunca'}
@@ -205,54 +126,10 @@ export function UsersTable({
 
                 {/* Email */}
                 <TableCell>
-                  {isEditingEmail ? (
-                    <div className="flex items-center gap-1">
-                      <Input
-                        type="email"
-                        value={editValue}
-                        onChange={(e) => setEditValue(e.target.value)}
-                        className="h-8 text-sm"
-                        autoFocus
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            handleSaveEdit(user.id, 'email');
-                          } else if (e.key === 'Escape') {
-                            handleCancelEdit();
-                          }
-                        }}
-                      />
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-8 w-8 p-0"
-                        onClick={() => handleSaveEdit(user.id, 'email')}
-                        disabled={isSaving}
-                      >
-                        {isSaving ? (
-                          <div className="h-3 w-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                        ) : (
-                          <Check className="h-3 w-3 text-green-600" />
-                        )}
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-8 w-8 p-0"
-                        onClick={handleCancelEdit}
-                      >
-                        <X className="h-3 w-3 text-red-600" />
-                      </Button>
-                    </div>
-                  ) : (
-                    <div
-                      className="flex items-center gap-2 text-sm cursor-pointer hover:text-primary transition-colors"
-                      onClick={() => handleStartEdit(user.id, 'email', user.email)}
-                    >
-                      <Mail className="h-4 w-4 text-muted-foreground" />
-                      {user.email}
-                      <Edit2 className="h-3 w-3 opacity-0 group-hover:opacity-50 transition-opacity" />
-                    </div>
-                  )}
+                  <div className="flex items-center gap-2 text-sm">
+                    <Mail className="h-4 w-4 text-muted-foreground" />
+                    {user.email}
+                  </div>
                   {user.isEmailVerified && (
                     <Badge variant="outline" className="mt-1 text-xs border-green-200 text-green-700">
                       <Check className="h-3 w-3 mr-1" />
@@ -263,54 +140,10 @@ export function UsersTable({
 
                 {/* Phone */}
                 <TableCell>
-                  {isEditingPhone ? (
-                    <div className="flex items-center gap-1">
-                      <Input
-                        type="tel"
-                        value={editValue}
-                        onChange={(e) => setEditValue(e.target.value)}
-                        className="h-8 text-sm"
-                        autoFocus
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            handleSaveEdit(user.id, 'phone');
-                          } else if (e.key === 'Escape') {
-                            handleCancelEdit();
-                          }
-                        }}
-                      />
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-8 w-8 p-0"
-                        onClick={() => handleSaveEdit(user.id, 'phone')}
-                        disabled={isSaving}
-                      >
-                        {isSaving ? (
-                          <div className="h-3 w-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                        ) : (
-                          <Check className="h-3 w-3 text-green-600" />
-                        )}
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="h-8 w-8 p-0"
-                        onClick={handleCancelEdit}
-                      >
-                        <X className="h-3 w-3 text-red-600" />
-                      </Button>
-                    </div>
-                  ) : (
-                    <div
-                      className="flex items-center gap-2 text-sm cursor-pointer hover:text-primary transition-colors"
-                      onClick={() => handleStartEdit(user.id, 'phone', user.phone || '')}
-                    >
-                      <Phone className="h-4 w-4 text-muted-foreground" />
-                      {user.phone || <span className="text-muted-foreground italic">Sin teléfono</span>}
-                      <Edit2 className="h-3 w-3 opacity-0 group-hover:opacity-50 transition-opacity" />
-                    </div>
-                  )}
+                  <div className="flex items-center gap-2 text-sm">
+                    <Phone className="h-4 w-4 text-muted-foreground" />
+                    {user.phone || <span className="text-muted-foreground italic">Sin teléfono</span>}
+                  </div>
                 </TableCell>
 
                 {/* Roles */}
@@ -375,51 +208,61 @@ export function UsersTable({
 
                 {/* Status */}
                 <TableCell>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 px-2"
-                    onClick={() => handleToggleActive(user.id, user.isActive)}
-                    disabled={savingCell === `${user.id}-isActive`}
+                  <Badge
+                    variant={user.isActive ? 'default' : 'destructive'}
+                    className={user.isActive 
+                      ? 'bg-green-600' 
+                      : 'bg-red-600'
+                    }
                   >
-                    {savingCell === `${user.id}-isActive` ? (
-                      <div className="h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                    ) : (
-                      <Badge
-                        variant={user.isActive ? 'default' : 'destructive'}
-                        className={`cursor-pointer hover:opacity-80 transition-opacity ${
-                          user.isActive 
-                            ? 'bg-green-600 hover:bg-green-600/80' 
-                            : 'bg-red-600 hover:bg-red-600/80'
-                        }`}
-                      >
-                        {user.isActive ? 'Activo' : 'Inactivo'}
-                      </Badge>
-                    )}
-                  </Button>
+                    {user.isActive ? 'Activo' : 'Inactivo'}
+                  </Badge>
                 </TableCell>
 
                 {/* Actions */}
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-8 w-8 p-0 hover:bg-accent data-[state=open]:bg-accent transition-colors"
+                      >
                         <MoreHorizontal className="h-4 w-4" />
+                        <span className="sr-only">Abrir menú</span>
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => onEdit(user)}>
-                        <Edit2 className="h-4 w-4 mr-2" />
-                        Editar todo
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuItem 
+                        onClick={() => handleToggleActive(user.id, user.isActive)}
+                        className="dropdown-hover"
+                      >
+                        {user.isActive ? (
+                          <>
+                            <X className="h-4 w-4 mr-2" />
+                            Desactivar
+                          </>
+                        ) : (
+                          <>
+                            <Check className="h-4 w-4 mr-2" />
+                            Activar
+                          </>
+                        )}
                       </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={() => onEdit(user)}
+                        className="dropdown-hover-blue"
+                      >
+                        <Edit2 className="h-4 w-4 mr-2" />
+                        Editar
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator className="bg-gray-300 my-1" />
                       <DropdownMenuItem
                         onClick={() => onDelete(user)}
-                        className="text-red-600 focus:text-red-600"
+                        className="dropdown-hover-red text-red-600"
                       >
                         <Trash2 className="h-4 w-4 mr-2" />
-                        Desactivar
+                        Eliminar
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

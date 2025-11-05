@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { ApiResponse } from '@/types';
+import type { ApiResponse, Product } from '@/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
 
@@ -186,30 +186,30 @@ export const usersApi = {
 
 // Products API
 export const productsApi = {
-  getAll: async (params?: Record<string, unknown>): Promise<ApiResponse> => {
+  getAll: async (params?: Record<string, unknown>): Promise<ApiResponse<Product[]>> => {
     const response = await api.get('/products', { params });
     return response.data;
   },
-  getById: async (id: string) => {
+  getById: async (id: string): Promise<ApiResponse<Product>> => {
     const response = await api.get(`/products/${id}`);
     return response.data;
   },
-  create: async (data: unknown) => {
+  create: async (data: unknown): Promise<ApiResponse<Product>> => {
     const response = await api.post('/products', data);
     return response.data;
   },
-  update: async (id: string, data: unknown) => {
+  update: async (id: string, data: unknown): Promise<ApiResponse<Product>> => {
     const response = await api.patch(`/products/${id}`, data);
     return response.data;
   },
-  delete: async (id: string) => {
+  delete: async (id: string): Promise<void> => {
     await api.delete(`/products/${id}`);
   },
-  deactivate: async (id: string) => {
+  deactivate: async (id: string): Promise<ApiResponse<Product>> => {
     const response = await api.patch(`/products/${id}/deactivate`);
     return response.data;
   },
-  activate: async (id: string) => {
+  activate: async (id: string): Promise<ApiResponse<Product>> => {
     const response = await api.patch(`/products/${id}/activate`);
     return response.data;
   },

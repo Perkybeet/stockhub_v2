@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { ModalBase } from '@/components/ui/modal-base';
+import { ResponsiveForm } from '@/components/ui/responsive-form';
 import { ProductForm } from './ProductForm';
 import type { Product, Category, Unit } from '@/types';
 
@@ -32,7 +32,7 @@ export function ProductModal({
   };
 
   return (
-    <ModalBase
+    <ResponsiveForm
       open={open}
       onOpenChange={onOpenChange}
       title={product ? 'Edit Product' : 'Create Product'}
@@ -70,6 +70,6 @@ export function ProductModal({
         formId="product-form"
         showButtons={false}
       />
-    </ModalBase>
+    </ResponsiveForm>
   );
 }

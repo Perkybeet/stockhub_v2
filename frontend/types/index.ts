@@ -17,7 +17,7 @@ export interface SessionActivity {
   id: string;
   sessionId: string;
   action: string;
-  details: Record<string, any>;
+  details: Record<string, unknown>;
   ipAddress: string;
   userAgent: string;
   timestamp: string;
@@ -82,7 +82,7 @@ export interface Company {
   subscriptionPlan: 'free' | 'basic' | 'premium' | 'enterprise';
   subscriptionExpiresAt?: string;
   isActive: boolean;
-  settings: Record<string, any>;
+  settings: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
 }
@@ -241,7 +241,7 @@ export interface Warehouse {
   longitude?: number;
   managerId?: string;
   isActive: boolean;
-  settings: Record<string, any>;
+  settings: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
   manager?: User;
@@ -270,7 +270,7 @@ export interface Product {
   shelfLifeDays?: number;
   storageConditions?: string;
   isActive: boolean;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
   category?: Category;
@@ -340,10 +340,10 @@ export interface CreateProductDto {
   shelfLifeDays?: number;
   storageConditions?: string;
   isActive?: boolean;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
-export interface UpdateProductDto extends Partial<CreateProductDto> {}
+export type UpdateProductDto = Partial<CreateProductDto>;
 
 export interface ProductQueryParams extends PaginationParams {
   categoryId?: string;
@@ -401,7 +401,7 @@ export interface Inventory {
 }
 
 // API Response types
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   message?: string;
@@ -451,9 +451,9 @@ export interface NavItemWithChildren extends NavItem {
   items: NavItemWithChildren[];
 }
 
-export interface MainNavItem extends NavItem {}
+export type MainNavItem = NavItem;
 
-export interface SidebarNavItem extends NavItemWithChildren {}
+export type SidebarNavItem = NavItemWithChildren;
 
 // Form types
 export interface FormField {
@@ -466,15 +466,15 @@ export interface FormField {
 }
 
 // Table types
-export interface Column<T = any> {
+export interface Column<T = unknown> {
   key: keyof T;
   label: string;
   sortable?: boolean;
   width?: string;
-  render?: (value: any, row: T) => React.ReactNode;
+  render?: (value: unknown, row: T) => React.ReactNode;
 }
 
-export interface TableAction<T = any> {
+export interface TableAction<T = unknown> {
   label: string;
   icon?: React.ComponentType<{ className?: string }>;
   onClick: (row: T) => void;

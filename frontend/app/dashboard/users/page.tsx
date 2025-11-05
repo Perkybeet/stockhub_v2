@@ -5,13 +5,7 @@ import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { ResponsiveForm } from '@/components/ui/responsive-form';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -451,76 +445,62 @@ export default function UsersManagementPage() {
       </Tabs>
 
       {/* User Modal */}
-      <Dialog open={userModal.open} onOpenChange={(open) => setUserModal({ open })}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>
-              {userModal.user ? 'Editar Usuario' : 'Nuevo Usuario'}
-            </DialogTitle>
-            <DialogDescription>
-              {userModal.user
-                ? 'Actualiza la información completa del usuario'
-                : 'Crea un nuevo usuario y asigna sus roles'}
-            </DialogDescription>
-          </DialogHeader>
-          <UserForm
-            user={userModal.user}
-            roles={roles}
-            onSubmit={
-              userModal.user
-                ? (data) => handleUpdateUser(data as UpdateUserRequest)
-                : (data) => handleCreateUser(data as CreateUserRequest)
-            }
-            onCancel={() => setUserModal({ open: false })}
-          />
-        </DialogContent>
-      </Dialog>
+      <ResponsiveForm
+        open={userModal.open}
+        onOpenChange={(open) => setUserModal({ open })}
+        title={userModal.user ? 'Editar Usuario' : 'Nuevo Usuario'}
+        description={
+          userModal.user
+            ? 'Actualiza la información completa del usuario'
+            : 'Crea un nuevo usuario y asigna sus roles'
+        }
+        size="3xl"
+      >
+        <UserForm
+          user={userModal.user}
+          roles={roles}
+          onSubmit={
+            userModal.user
+              ? (data) => handleUpdateUser(data as UpdateUserRequest)
+              : (data) => handleCreateUser(data as CreateUserRequest)
+          }
+          onCancel={() => setUserModal({ open: false })}
+        />
+      </ResponsiveForm>
 
       {/* Role Modal */}
-      <Dialog open={roleModal.open} onOpenChange={(open) => setRoleModal({ open })}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>
-              {roleModal.role ? 'Editar Rol' : 'Nuevo Rol'}
-            </DialogTitle>
-            <DialogDescription>
-              {roleModal.role
-                ? 'Actualiza la configuración del rol'
-                : 'Crea un nuevo rol y asigna sus permisos'}
-            </DialogDescription>
-          </DialogHeader>
-          <RoleForm
-            role={roleModal.role}
-            permissionsGrouped={permissionsGrouped}
-            onSubmit={
-              roleModal.role
-                ? (data) => handleUpdateRole(data as UpdateRoleRequest)
-                : (data) => handleCreateRole(data as CreateRoleRequest)
-            }
-            onCancel={() => setRoleModal({ open: false })}
-          />
-        </DialogContent>
-      </Dialog>
+      <ResponsiveForm
+        open={roleModal.open}
+        onOpenChange={(open) => setRoleModal({ open })}
+        title={roleModal.role ? 'Editar Rol' : 'Nuevo Rol'}
+        description={
+          roleModal.role
+            ? 'Actualiza la configuración del rol'
+            : 'Crea un nuevo rol y asigna sus permisos'
+        }
+        size="4xl"
+      >
+        <RoleForm
+          role={roleModal.role}
+          permissionsGrouped={permissionsGrouped}
+          onSubmit={
+            roleModal.role
+              ? (data) => handleUpdateRole(data as UpdateRoleRequest)
+              : (data) => handleCreateRole(data as CreateRoleRequest)
+          }
+          onCancel={() => setRoleModal({ open: false })}
+        />
+      </ResponsiveForm>
 
       {/* Permissions Manager Modal */}
-      <Dialog open={permissionsModal.open} onOpenChange={(open) => setPermissionsModal({ open })}>
-        <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
-          <DialogHeader>
-            <DialogTitle>
-              Gestionar Permisos: {permissionsModal.role?.name}
-            </DialogTitle>
-            <DialogDescription>
-              Selecciona los permisos que tendrá este rol
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex-1 overflow-hidden">
-            <PermissionsManager
-              permissionsGrouped={permissionsGrouped}
-              selectedPermissions={selectedPermissions}
-              onPermissionsChange={setSelectedPermissions}
-            />
-          </div>
-          <div className="flex justify-end gap-3 pt-4 border-t">
+      <ResponsiveForm
+        open={permissionsModal.open}
+        onOpenChange={(open) => setPermissionsModal({ open })}
+        title={`Gestionar Permisos: ${permissionsModal.role?.name || ''}`}
+        description="Selecciona los permisos que tendrá este rol"
+        size="5xl"
+        footer={
+          <div className="flex justify-end gap-3 w-full">
             <Button variant="outline" onClick={() => setPermissionsModal({ open: false })}>
               Cancelar
             </Button>
@@ -529,8 +509,14 @@ export default function UsersManagementPage() {
               Guardar Permisos
             </Button>
           </div>
-        </DialogContent>
-      </Dialog>
+        }
+      >
+        <PermissionsManager
+          permissionsGrouped={permissionsGrouped}
+          selectedPermissions={selectedPermissions}
+          onPermissionsChange={setSelectedPermissions}
+        />
+      </ResponsiveForm>
 
       {/* Delete Confirmation Dialog */}
       <AlertDialog

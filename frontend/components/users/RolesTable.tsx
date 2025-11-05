@@ -133,7 +133,7 @@ export function RolesTable({
               {/* Left: Role Info */}
               <div className="flex-1 space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                  <div className="h-10 w-10 rounded-lg bg-linear-to-br from-primary/20 to-primary/5 flex items-center justify-center">
                     <Shield className="h-5 w-5 text-primary" />
                   </div>
                   
@@ -300,11 +300,16 @@ export function RolesTable({
 
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-8 w-8 p-0 hover:bg-accent data-[state=open]:bg-accent transition-colors"
+                      >
                         <MoreHorizontal className="h-4 w-4" />
+                        <span className="sr-only">Abrir menú</span>
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
+                    <DropdownMenuContent align="end" className="w-48">
                       <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={() => onPermissionsEdit(role)}>
@@ -319,6 +324,7 @@ export function RolesTable({
                         onClick={() => onDelete(role)}
                         disabled={role.isSystemRole || (role.userCount || 0) > 0}
                         className="text-red-600 focus:text-red-600"
+                        variant="destructive"
                       >
                         <Trash2 className="h-4 w-4 mr-2" />
                         Eliminar

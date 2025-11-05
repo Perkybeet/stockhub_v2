@@ -17,8 +17,8 @@
     --color-secondary-foreground: #78350f;
     --color-muted: #f5f5f5;
     --color-muted-foreground: #737373;
-    --color-accent: #fbbf24;
-    --color-accent-foreground: #78350f;
+    --color-accent: #f5f5f5;
+    --color-accent-foreground: #0a0a0a;
     --color-destructive: #ef4444;
     --color-destructive-foreground: #fafafa;
     --color-border: #e5e5e5;
@@ -45,8 +45,8 @@
     --color-secondary-foreground: #fef3c7;
     --color-muted: #262626;
     --color-muted-foreground: #a3a3a3;
-    --color-accent: #fbbf24;
-    --color-accent-foreground: #0a0a0a;
+    --color-accent: #262626;
+    --color-accent-foreground: #fafafa;
     --color-destructive: #7f1d1d;
     --color-destructive-foreground: #fafafa;
     --color-border: #262626;
@@ -69,6 +69,30 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Cursor pointer para elementos interactivos */
+  button,
+  [role="button"],
+  [type="button"],
+  [type="submit"],
+  [type="reset"],
+  a,
+  select,
+  [role="menuitem"],
+  [role="option"],
+  [role="tab"],
+  label:has(input[type="checkbox"]),
+  label:has(input[type="radio"]) {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [role="button"][aria-disabled="true"],
+  [type="button"]:disabled,
+  [type="submit"]:disabled,
+  [type="reset"]:disabled {
+    cursor: not-allowed;
   }
 
   /* Cursor de texto visible en todos los inputs y textareas */
@@ -257,6 +281,69 @@
     background: rgba(15, 23, 42, 0.7);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Dropdown menu hover con color mostaza */
+  .dropdown-hover:hover {
+    background-color: rgba(196, 145, 2, 0.1);
+    color: var(--color-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .dropdown-hover:focus {
+    background-color: rgba(196, 145, 2, 0.1);
+    color: var(--color-primary);
+  }
+
+  .dropdown-hover {
+    transition: all 0.2s ease;
+  }
+
+  .dark .dropdown-hover:hover {
+    background-color: rgba(212, 160, 23, 0.1);
+    color: var(--color-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .dark .dropdown-hover:focus {
+    background-color: rgba(212, 160, 23, 0.1);
+    color: var(--color-primary);
+  }
+
+  /* Dropdown menu hover azul para editar */
+  .dropdown-hover-blue:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: rgb(59, 130, 246);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+  }
+
+  .dropdown-hover-blue:focus {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: rgb(59, 130, 246);
+  }
+
+  .dropdown-hover-blue {
+    transition: all 0.2s ease;
+  }
+
+  /* Dropdown menu hover rojo para eliminar */
+  .dropdown-hover-red:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: rgb(239, 68, 68);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+  }
+
+  .dropdown-hover-red:focus {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: rgb(239, 68, 68);
+  }
+
+  .dropdown-hover-red {
+    transition: all 0.2s ease;
   }
 }
 
