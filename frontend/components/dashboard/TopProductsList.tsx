@@ -35,15 +35,13 @@ export function TopProductsList() {
 
   if (loading) {
     return (
-      <Card className="bg-slate-50 border-slate-200">
+      <Card className="bg-slate-50 border-slate-200 h-full flex flex-col">
         <CardHeader>
           <CardTitle className="text-slate-900">Productos Más Activos</CardTitle>
           <CardDescription className="text-slate-600">Últimos 30 días</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-center py-8">
-            <p className="text-slate-600">Cargando...</p>
-          </div>
+        <CardContent className="flex-1 flex items-center justify-center">
+          <p className="text-slate-600">Cargando...</p>
         </CardContent>
       </Card>
     );
@@ -51,28 +49,26 @@ export function TopProductsList() {
 
   if (data.length === 0) {
     return (
-      <Card className="bg-slate-50 border-slate-200">
+      <Card className="bg-slate-50 border-slate-200 h-full flex flex-col">
         <CardHeader>
           <CardTitle className="text-slate-900">Productos Más Activos</CardTitle>
           <CardDescription className="text-slate-600">Últimos 30 días</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-center py-8">
-            <p className="text-slate-600">No hay datos disponibles</p>
-          </div>
+        <CardContent className="flex-1 flex items-center justify-center">
+          <p className="text-slate-600">No hay datos disponibles</p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="bg-slate-50 border-slate-200 flex flex-col">
+    <Card className="bg-slate-50 border-slate-200 flex flex-col h-full">
       <CardHeader className="shrink-0">
         <CardTitle className="text-slate-900">Productos Más Activos</CardTitle>
         <CardDescription className="text-slate-600">Con más movimientos en los últimos 30 días</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 overflow-hidden">
-        <div className="space-y-3 overflow-y-auto max-h-[400px] pr-2 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-100">
+        <div className="space-y-3 overflow-y-auto h-[300px] pr-2 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-100">
           {data.map((product, index) => (
             <div
               key={product.id}

@@ -1,7 +1,7 @@
 # Sistema de Gestión de Inventario Multi-Empresa
 
 ## Descripción
-Sistema integral de gestión de inventario para cadenas de restaurantes, empresas independientes y franquicias. Arquitectura multi-tenant con aislamiento completo de datos entre empresas.
+Sistema integral de gestión de inventario para cadenas de restaurantes, empresas independientes y franquicias. Arquitectura multi-tenant con aislamiento completo de datos entre empresas. /frontend y /backend (2 apps separadas).
 
 ## Stack Tecnológico
 
@@ -184,3 +184,7 @@ lib/
 - Tests unitarios para servicios complejos
 - Tests e2e para flujos críticos
 - Mocks para dependencias externas
+
+### Comandos de usuario (prefix: ?)
+?commit: Generate a concise and descriptive git commit message based on the changes made in the recent edits.
+?commitpush: Create a git commit with the generated message and push the changes to the remote repository.

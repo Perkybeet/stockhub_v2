@@ -111,6 +111,44 @@ export interface User {
   roles: Role[];
 }
 
+// User API types
+export interface CreateUserRequest {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  phone?: string;
+  language?: string;
+  timezone?: string;
+  isActive?: boolean;
+  roleIds?: string[];
+}
+
+export interface UpdateUserRequest {
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  language?: string;
+  timezone?: string;
+  isActive?: boolean;
+  roleIds?: string[];
+}
+
+export interface AssignRolesRequest {
+  roleIds: string[];
+}
+
+export interface UsersListResponse {
+  data: User[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}
+
 // Permission types
 export interface Permission {
   id: string;
@@ -124,6 +162,21 @@ export interface Permission {
   updatedAt: string;
 }
 
+export interface PermissionsListResponse {
+  data: Permission[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}
+
+export interface PermissionsByResource {
+  resource: string;
+  permissions: Permission[];
+}
+
 // Role types
 export interface Role {
   id: string;
@@ -135,7 +188,39 @@ export interface Role {
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
-  permissions: Permission[];
+  permissions?: Permission[];
+  users?: User[];
+  userCount?: number;
+}
+
+export interface CreateRoleRequest {
+  name: string;
+  slug: string;
+  description?: string;
+  isActive?: boolean;
+  permissionIds?: string[];
+}
+
+export interface UpdateRoleRequest {
+  name?: string;
+  slug?: string;
+  description?: string;
+  isActive?: boolean;
+  permissionIds?: string[];
+}
+
+export interface AssignPermissionsRequest {
+  permissionIds: string[];
+}
+
+export interface RolesListResponse {
+  data: Role[];
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
 }
 
 // Warehouse types

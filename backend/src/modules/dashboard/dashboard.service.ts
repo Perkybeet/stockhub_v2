@@ -271,14 +271,13 @@ export class DashboardService {
         isActive: true
       },
       select: {
-        id: true,
         name: true,
         products: {
           where: {
             isActive: true
           },
           select: {
-            id: true,
+            costPrice: true,
             inventory: {
               select: {
                 quantity: true
@@ -290,19 +289,27 @@ export class DashboardService {
     });
 
     return categories.map(category => {
-      const totalQuantity = category.products.reduce((categorySum, product) => {
+      let totalQuantity = 0;
+      let totalValue = 0;
+
+      category.products.forEach(product => {
         const productQuantity = product.inventory.reduce((sum, inv) => 
           sum + (inv.quantity ? Number(inv.quantity) : 0), 0
         );
-        return categorySum + productQuantity;
-      }, 0);
+        totalQuantity += productQuantity;
+        
+        // Calcular valor usando el precio de costo del producto
+        const costPrice = product.costPrice ? Number(product.costPrice) : 0;
+        totalValue += productQuantity * costPrice;
+      });
 
       return {
         category: category.name,
         quantity: Math.round(totalQuantity),
+        value: Math.round(totalValue * 100) / 100, // Redondear a 2 decimales
         products: category.products.length
       };
-    }).filter(cat => cat.quantity > 0);
+    }).filter(cat => cat.quantity > 0 || cat.value > 0);
   }
 
   async getMonthlyMovements(companyId: string) {

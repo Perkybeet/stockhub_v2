@@ -1,34 +1,47 @@
-﻿"use client";
+"use client";
 
-import { withAuth } from "@/lib/contexts/AuthContext";
-import { DashboardStats } from "@/components/dashboard/DashboardStats";
-import { InventoryByCategoryChart } from "@/components/dashboard/InventoryByCategoryChart";
-import { MonthlyMovementsChart } from "@/components/dashboard/MonthlyMovementsChart";
-import { WarehouseStockChart } from "@/components/dashboard/WarehouseStockChart";
-import { TopProductsList } from "@/components/dashboard/TopProductsList";
-import { RecentActivity } from "@/components/dashboard/RecentActivity";
-import { StockAlerts } from "@/components/dashboard/StockAlerts";
+import {
+  DashboardStats,
+  StockAlerts,
+  TopProductsList,
+  MonthlyMovementsChart,
+  InventoryByCategoryChart,
+  WarehouseStockChart,
+  RecentActivity,
+} from "@/components/dashboard";
 
-function Dashboard() {
+export default function DashboardPage() {
   return (
     <div className="space-y-6">
+      {/* Stats Cards */}
       <DashboardStats />
+
+      {/* Main Grid */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <MonthlyMovementsChart />
-        <InventoryByCategoryChart />
-      </div>
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          <WarehouseStockChart />
-        </div>
+        {/* Stock Alerts */}
+        <StockAlerts />
+
+        {/* Top Products */}
         <TopProductsList />
       </div>
+
+      {/* Charts Section */}
       <div className="grid gap-6 lg:grid-cols-2">
+        {/* Monthly Movements */}
+        <MonthlyMovementsChart />
+
+        {/* Inventory by Category */}
+        <InventoryByCategoryChart />
+      </div>
+
+      {/* Additional Charts */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Warehouse Stock */}
+        <WarehouseStockChart />
+
+        {/* Recent Activity */}
         <RecentActivity />
-        <StockAlerts />
       </div>
     </div>
   );
 }
-
-export default withAuth(Dashboard);

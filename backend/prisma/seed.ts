@@ -141,7 +141,7 @@ async function main() {
       name: 'Gourmet Restaurant Chain',
       legalName: 'Gourmet Restaurant Chain LLC',
       taxId: 'RC-123456789',
-      email: 'admin@gourmetchain.com',
+      email: 'admin@stockhub.com',
       phone: '+1-555-0101',
       industry: 'restaurant',
       companyType: 'chain',
@@ -870,7 +870,7 @@ async function seedCompanyData(companies: any[], rolesByCompany: Record<string, 
   console.log(`   ✅ Stock Transfers: ${transferCount} (${transferItemCount} items)`);
   
   console.log('\n📝 DEMO CREDENTIALS:');
-  console.log('   Email: admin@gourmetchain.com');
+  console.log('   Email: admin@stockhub.com');
   console.log('   Email: admin@labellacucina.com');
   console.log('   Email: admin@quickbites.com');
   console.log('   Password: Admin123!');

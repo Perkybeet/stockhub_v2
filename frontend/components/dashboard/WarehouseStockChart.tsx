@@ -115,15 +115,13 @@ export function WarehouseStockChart() {
 
   if (loading) {
     return (
-      <Card className="bg-slate-50 border-slate-200">
+      <Card className="bg-slate-50 border-slate-200 h-full flex flex-col">
         <CardHeader>
           <CardTitle className="text-slate-900">Stock por Almacén</CardTitle>
           <CardDescription className="text-slate-600">Cantidad y variedad</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="h-[300px] flex items-center justify-center">
-            <p className="text-slate-600">Cargando...</p>
-          </div>
+        <CardContent className="flex-1 flex items-center justify-center">
+          <p className="text-slate-600">Cargando...</p>
         </CardContent>
       </Card>
     );
@@ -131,22 +129,20 @@ export function WarehouseStockChart() {
 
   if (data.length === 0) {
     return (
-      <Card className="bg-slate-50 border-slate-200">
+      <Card className="bg-slate-50 border-slate-200 h-full flex flex-col">
         <CardHeader>
           <CardTitle className="text-slate-900">Stock por Almacén</CardTitle>
           <CardDescription className="text-slate-600">Cantidad y variedad</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="h-[300px] flex items-center justify-center">
-            <p className="text-slate-600">No hay datos disponibles</p>
-          </div>
+        <CardContent className="flex-1 flex items-center justify-center">
+          <p className="text-slate-600">No hay datos disponibles</p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="bg-slate-50 border-slate-200">
+    <Card className="bg-slate-50 border-slate-200 h-full">
       <CardHeader>
         <CardTitle className="text-slate-900">Stock por Almacén</CardTitle>
         <CardDescription className="text-slate-600">Distribución de inventario por ubicación</CardDescription>
